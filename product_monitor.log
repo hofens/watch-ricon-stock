@@ -1,0 +1,33 @@
+2025-10-18 14:35:10,470 - ERROR - Configuration file config.json not found.
+2025-10-18 15:17:01,208 - ERROR - Configuration file config.json not found.
+2025-10-18 15:17:30,195 - ERROR - Configuration file config.json not found.
+2025-10-18 15:17:56,740 - ERROR - Configuration file config.json not found.
+2025-10-18 15:18:08,316 - ERROR - Configuration file config.json not found.
+2025-10-18 15:18:26,215 - ERROR - Configuration file config.json not found.
+2025-10-18 15:19:01,174 - INFO - Starting product monitoring for: https://newsite.ricn-mall.com/api/pc/get_products?page=1&limit=10&cid=9&sid=0&priceOrder=&news=0
+2025-10-18 15:19:01,175 - INFO - Polling interval: 300 seconds
+2025-10-18 15:19:01,175 - INFO - Notification method: email
+2025-10-18 15:19:01,175 - INFO - Time range enabled: 09:00 to 23:59
+2025-10-18 15:19:01,175 - INFO - Sending startup notification email...
+2025-10-18 15:19:01,853 - INFO - Startup notification email sent to huanghofe@163.com
+2025-10-18 15:19:01,853 - INFO - Fetching product data...
+2025-10-18 15:19:02,083 - INFO - Changes detected! 0 new, 0 removed, 0 updated
+2025-10-18 15:19:02,917 - INFO - Email notification sent to huanghofe@163.com
+2025-10-18 15:19:33,176 - INFO - Starting product monitoring for: https://newsite.ricn-mall.com/api/pc/get_products?page=1&limit=10&cid=9&sid=0&priceOrder=&news=0
+2025-10-18 15:19:33,176 - INFO - Polling interval: 300 seconds
+2025-10-18 15:19:33,176 - INFO - Notification method: email
+2025-10-18 15:19:33,177 - INFO - Time range enabled: 09:00 to 23:59
+2025-10-18 15:19:33,177 - INFO - Sending startup notification email...
+2025-10-18 15:19:33,584 - INFO - Startup notification email sent to huanghofe@163.com
+2025-10-18 15:19:33,584 - INFO - Fetching product data...
+2025-10-18 15:19:33,797 - INFO - Changes detected! 0 new, 0 removed, 0 updated
+2025-10-18 15:19:34,698 - INFO - Email notification sent to huanghofe@163.com
+2025-10-18 15:21:25,378 - INFO - Starting product monitoring for: https://newsite.ricn-mall.com/api/pc/get_products?page=1&limit=10&cid=9&sid=0&priceOrder=&news=0
+2025-10-18 15:21:25,378 - INFO - Polling interval: 300 seconds
+2025-10-18 15:21:25,379 - INFO - Notification method: email
+2025-10-18 15:21:25,379 - INFO - Time range enabled: 09:00 to 23:59
+2025-10-18 15:21:25,379 - INFO - Sending startup notification email...
+2025-10-18 15:21:26,340 - INFO - Startup notification email sent to huanghofe@163.com
+2025-10-18 15:21:26,340 - INFO - Fetching product data...
+2025-10-18 15:21:26,557 - INFO - Changes detected! 0 new, 0 removed, 0 updated
+2025-10-18 15:21:27,659 - INFO - Email notification sent to huanghofe@163.com

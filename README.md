@@ -284,22 +284,5 @@ watch-ricon-stock/
 └── product_changes.log    # Change notifications (generated)
 ```
 
-## Cloudflare Deployment
-
-This project includes support for deployment on Cloudflare infrastructure using Python Workers. See `CLOUDFLARE_DEPLOY.md` for detailed instructions on deploying the application. The project now supports:
-
-- Cloudflare Python Workers (requires python_workers compatibility flag)
-- Environment variable configuration for sensitive data
-- Flask-based web API for HTTP access
-- Automated configuration from environment variables
-
-The project includes:
-- A Flask-based web API (`web_api.py`) for HTTP access
-- Wrangler configuration for Cloudflare Workers
-- Configuration generation from environment variables
-- Deployment script for setup assistance
-
-**Note**: Cloudflare Python Workers support may require special access or be in beta. Check Cloudflare documentation for current availability.
-
 ## License
 This project is open source and available under the MIT License.

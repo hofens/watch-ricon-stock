@@ -284,22 +284,5 @@ watch-ricon-stock/
 └── product_changes.log    # 变更通知（生成的）
 ```
 
-## Cloudflare 部署
-
-本项目包含对 Cloudflare 基础设施部署的支持，使用 Python Workers。详情请参阅 `CLOUDFLARE_DEPLOY.md` 了解如何部署应用程序。项目现在支持：
-
-- Cloudflare Python Workers（需要 python_workers 兼容性标志）
-- 环境变量配置敏感数据
-- 基于 Flask 的 Web API 用于 HTTP 访问
-- 从环境变量自动生成配置
-
-项目包含：
-- 基于 Flask 的 Web API（`web_api.py`）用于 HTTP 访问
-- 用于 Cloudflare Workers 的 Wrangler 配置
-- 从环境变量生成配置
-- 用于设置辅助的部署脚本
-
-**注意**：Cloudflare Python Workers 支持可能需要特殊访问权限或处于测试阶段。请查看 Cloudflare 文档了解当前可用性。
-
 ## 许可证
 本项目开源，采用 MIT 许可证。

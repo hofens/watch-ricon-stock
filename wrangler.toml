@@ -1,7 +1,0 @@
-name = "watch-ricon-stock"
-main = "web_api.py"
-compatibility_date = "2024-10-18"
-compatibility_flags = ["python_workers"]
-
-[env.production]
-# Production environment variables will be set in Cloudflare Dashboard

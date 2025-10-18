@@ -4,8 +4,8 @@ watch-ricon-stock Web API Interface
 """
 from flask import Flask, jsonify, request
 import os
+import json
 import threading
-import time
 from src.product_monitor import ProductMonitor
 
 app = Flask(__name__)
@@ -14,6 +14,37 @@ app = Flask(__name__)
 monitor = None
 monitor_thread = None
 is_monitoring = False
+
+def create_config_from_env():
+    """从环境变量创建配置文件"""
+    config = {
+        "api_url": os.environ.get('API_URL', 'https://newsite.ricn-mall.com/api/pc/get_products?page=1&limit=10&cid=9&sid=0&priceOrder=&news=0'),
+        "polling_interval_seconds": int(os.environ.get('POLLING_INTERVAL', 300)),
+        "notification_method": "email",
+        "time_range": {
+            "enable": False,
+            "start_time": "09:00",
+            "end_time": "23:59"
+        },
+        "notification_config": {
+            "email": {
+                "smtp_server": os.environ.get('SMTP_SERVER', 'smtp.gmail.com'),
+                "smtp_port": int(os.environ.get('SMTP_PORT', 587)),
+                "smtp_user": os.environ.get('SMTP_USER', ''),
+                "smtp_password": os.environ.get('SMTP_PASSWORD', ''),
+                "to_email": os.environ.get('TO_EMAIL', '')
+            }
+        },
+        "log_file": "product_monitor.log",
+        "changes_log": "product_changes.log"
+    }
+    
+    # 保存到临时配置文件
+    config_path = 'src/config.cf.json'
+    with open(config_path, 'w', encoding='utf-8') as f:
+        json.dump(config, f, ensure_ascii=False, indent=2)
+    
+    return config_path
 
 @app.route('/')
 def home():
@@ -25,8 +56,18 @@ def home():
             "/start",
             "/stop", 
             "/status",
-            "/products"
+            "/products",
+            "/health"
         ]
+    })
+
+@app.route('/health', methods=['GET'])
+def health_check():
+    """健康检查端点，适合Cloudflare使用"""
+    return jsonify({
+        "status": "healthy",
+        "service": "watch-ricon-stock",
+        "timestamp": os.environ.get('CURRENT_TIMESTAMP', '')
     })
 
 @app.route('/start', methods=['POST'])
@@ -37,10 +78,11 @@ def start_monitor():
         return jsonify({"message": "Monitor is already running"}), 400
     
     try:
-        config_file = request.json.get('config', 'src/config.local.json') if os.path.exists('src/config.local.json') else 'src/config.json'
+        # 从环境变量创建配置文件
+        config_path = create_config_from_env()
         
         # 创建监控器
-        monitor = ProductMonitor(config_file=config_file)
+        monitor = ProductMonitor(config_file=config_path)
         
         # 启动监控线程
         def run_monitor():
@@ -51,7 +93,10 @@ def start_monitor():
         monitor_thread = threading.Thread(target=run_monitor, daemon=True)
         monitor_thread.start()
         
-        return jsonify({"message": "Monitor started successfully"})
+        return jsonify({
+            "message": "Monitor started successfully",
+            "config_source": "environment_variables"
+        })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -68,7 +113,8 @@ def stop_monitor():
 def get_status():
     return jsonify({
         "status": "active" if is_monitoring else "inactive",
-        "monitoring": is_monitoring
+        "monitoring": is_monitoring,
+        "config_source": "environment_variables" if os.environ.get('SMTP_USER') else "default_file"
     })
 
 @app.route('/products', methods=['GET'])
@@ -78,7 +124,8 @@ def get_products():
         # 注意：实际产品监控需要在后台运行
         return jsonify({
             "message": "Product monitoring is running in background",
-            "status": "active" if is_monitoring else "inactive"
+            "status": "active" if is_monitoring else "inactive",
+            "config_source": "environment_variables" if os.environ.get('SMTP_USER') else "default_file"
         })
     except Exception as e:
         return jsonify({"error": str(e)}), 500

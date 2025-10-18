@@ -1,112 +1,87 @@
 # Cloudflare 部署指南 - watch-ricon-stock
 
-## 部署选项
+## 通过 Cloudflare Pages 从 GitHub 导入部署
 
-本项目提供了多种在 Cloudflare 平台上部署的选项：
+本项目可以轻松地从 GitHub 导入到 Cloudflare Pages，并通过环境变量配置进行部署。
 
-### 选项 1: Cloudflare Workers with Workers KV (推荐)
-适用于轻量级部署和调度任务。
+### 部署步骤
 
-### 选项 2: Cloudflare Pages + Functions
-适用于需要更复杂后端逻辑的部署。
+1. **在 GitHub 创建仓库**
+   - 将项目代码推送到 GitHub 仓库
+   
+2. **登录 Cloudflare Dashboard**
+   - 访问 https://dash.cloudflare.com
+   - 选择你的账户
 
-### 选项 3: Cloudflare Container (Docker)
-适用于完整的容器化部署。
+3. **创建 Pages 项目**
+   - 导航到 Pages 部分
+   - 点击 "Create a project"
+   - 选择 "Connect to Git"
 
-## 选项 3: Docker 部署 (适用于 Cloudflare Container)
+4. **连接 GitHub 仓库**
+   - 选择你的 watch-ricon-stock 仓库
+   - 点击 "Begin setup"
 
-### 部署步骤:
+5. **配置构建设置**
+   - 构建输出目录: (留空)
+   - 构建命令: `echo "Python app doesn't need build step"`
+   - 环境变量: 见下文
 
-1. **准备 Docker 镜像**
-   ```bash
-   docker build -t watch-ricon-stock .
-   ```
+6. **设置环境变量**
+   在 Cloudflare Dashboard 中设置以下环境变量：
+   
+   - `SMTP_SERVER` - 邮件服务器 (如 smtp.gmail.com)
+   - `SMTP_PORT` - 邮件服务器端口 (如 587) 
+   - `SMTP_USER` - 邮箱账号
+   - `SMTP_PASSWORD` - 邮箱密码或应用专用密码
+   - `TO_EMAIL` - 接收通知的邮箱地址
+   - `API_URL` - (可选) 监控的 API 地址
+   - `POLLING_INTERVAL` - (可选) 轮询间隔（秒）
 
-2. **运行容器本地测试**
-   ```bash
-   docker run -p 5000:5000 watch-ricon-stock
-   ```
+7. **部署项目**
+   - 点击 "Save and Deploy"
+   - Cloudflare Pages 将自动部署项目
 
-3. **将镜像推送到容器注册表**
-   ```bash
-   # 登录到容器注册表（如 Docker Hub 或 Cloudflare Registry）
-   docker tag watch-ricon-stock <your_registry>/watch-ricon-stock:latest
-   docker push <your_registry>/watch-ricon-stock:latest
-   ```
+### 配置说明
 
-4. **在 Cloudflare 部署**
-   - 访问 Cloudflare Dashboard
-   - 进入 Workers & Pages
-   - 选择 "Create a project" -> "Deploy a container image"
-   - 输入你的镜像地址
+由于 Cloudflare Pages 主要用于托管静态网站，而这是一个 Python 应用，所以需要一些额外的配置：
 
-## 配置
+1. **使用环境变量**：将敏感信息（邮箱账号密码）通过环境变量传递
+2. **定时任务**：使用外部服务或 Cloudflare Cron Triggers 来定期运行监控脚本
 
-### 环境变量
-容器需要以下环境变量：
+### 部署后配置
 
-- `CONFIG_FILE` - 配置文件路径 (默认: `src/config.json`)
+项目部署后，您需要：
 
-### 挂载配置卷
-推荐将配置文件挂载到容器中：
-```bash
-docker run -p 5000:5000 -v /path/to/config:/app/src/config.json watch-ricon-stock
+1. **使用环境变量创建配置文件**：
+   程序会从环境变量读取配置，如果环境变量存在，将自动生成配置文件
+
+2. **运行监控脚本**：
+   - 由于 Pages 是静态托管，需要外部服务触发脚本执行
+   - 可以使用 GitHub Actions、Cron Jobs 或其他服务器来定期运行
+
+### 配置 Cloudflare Cron Triggers（可选）
+
+为了实现自动监控，您可以配置 Cloudflare Cron Triggers：
+
+1. 在 wrangler.toml 中添加:
+```toml
+[triggers]
+crons = ["*/10 * * * *"]  # 每10分钟运行一次
 ```
 
-## API 端点
+2. 创建一个简单的触发端点来运行监控脚本
 
-应用提供了以下 REST API 端点:
-- `GET /` - 获取应用状态
-- `POST /start` - 启动监控
-- `POST /stop` - 停止监控  
-- `GET /status` - 获取监控状态
-- `GET /products` - 获取产品状态
+### 注意事项
 
-## Web API 功能
+1. **定时任务**：Cloudflare Pages 本身是静态托管，无法持续运行 Python 脚本
+2. **外部触发**：需要外部服务定期触发监控脚本
+3. **成本考虑**：如果需要持续监控，可能需要考虑 Cloudflare Workers Paid Plan 或其他服务器
 
-Web API 将原命令行监控器包装为 HTTP 服务，支持:
-- 远程启动/停止监控
-- 实时状态检查
-- 与 Cloudflare 的无缝集成
+### 简化部署方式
 
-## 注意事项
+如果您只需要从 GitHub 导入并配置环境变量：
 
-1. **持续运行**: 由于这是监控应用，需要保持持续运行
-2. **调度**: 你可以使用外部服务（如 CRON）来定期触发 API
-3. **健康检查**: `/` 和 `/status` 端点可以作为健康检查
-4. **日志**: 日志输出到标准输出，Cloudflare 会自动收集
-
-## 环境配置
-
-创建一个 config.local.json 文件放在容器的 /app/src/ 盕录下：
-
-```json
-{
-  "api_url": "https://newsite.ricn-mall.com/api/pc/get_products?page=1&limit=10&cid=9&sid=0&priceOrder=&news=0",
-  "polling_interval_seconds": 300,
-  "notification_method": "email",
-  "time_range": {
-    "enable": false,
-    "start_time": "09:00",
-    "end_time": "23:59"
-  },
-  "notification_config": {
-    "email": {
-      "smtp_server": "smtp.gmail.com",
-      "smtp_port": 587,
-      "smtp_user": "your_email@gmail.com",
-      "smtp_password": "your_app_password",
-      "to_email": "recipient@example.com"
-    }
-  },
-  "log_file": "product_monitor.log",
-  "changes_log": "product_changes.log"
-}
-```
-
-## 部署到 Cloudflare 的优点
-
-- 全球 CDN 分发
-- 内置 DDoS 保护
-- 可靠的基础设施
-- 与 Cloudflare 生态系统集成
+1. 在 Cloudflare Pages 项目设置中，添加环境变量
+2. 项目会根据环境变量自动生成配置文件
+3. 通过外部服务触发脚本执行

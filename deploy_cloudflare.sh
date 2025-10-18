@@ -1,33 +1,48 @@
 #!/bin/bash
-# Cloudflare 部署脚本
+# Cloudflare Pages 部署准备脚本
 
-set -e  # 遇到错误时停止脚本
+echo "准备部署 watch-ricon-stock 到 Cloudflare Pages..."
 
-echo "开始部署 watch-ricon-stock 到 Cloudflare..."
-
-# 检查必要工具
-if ! command -v docker &> /dev/null; then
-    echo "错误: Docker 未安装或不可用"
+echo "步骤 1: 检查项目依赖"
+if ! command -v git &> /dev/null; then
+    echo "错误: Git 未安装或不可用"
     exit 1
 fi
 
-if ! command -v wrangler &> /dev/null; then
-    echo "警告: wrangler 未安装，跳过 Workers 部署"
-    echo "安装 wrangler: npm install -g wrangler"
+echo "步骤 2: 确保代码已提交"
+git_status=$(git status --porcelain)
+if [[ -n "$git_status" ]]; then
+    echo "警告: 工作目录有未提交的更改，建议先提交"
+    read -p "是否继续? (y/n): " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        exit 1
+    fi
 fi
 
-# 构建 Docker 镜像
-echo "构建 Docker 镜像..."
-docker build -t watch-ricon-stock .
+echo "步骤 3: 验证配置"
+echo "在 Cloudflare Pages 部署时，请设置以下环境变量:"
+echo "  - SMTP_SERVER: 邮件服务器 (如 smtp.gmail.com)"
+echo "  - SMTP_PORT: 邮件服务器端口 (如 587)"
+echo "  - SMTP_USER: 邮箱账号"
+echo "  - SMTP_PASSWORD: 邮箱密码或应用专用密码" 
+echo "  - TO_EMAIL: 接收通知的邮箱地址"
+echo "  - API_URL: (可选) 监控的 API 地址"
+echo "  - POLLING_INTERVAL: (可选) 轮询间隔（秒）"
 
-# 运行本地测试
-echo "运行本地测试..."
-docker run -d -p 5000:5000 --name watch-ricon-stock-test watch-ricon-stock
+echo
+echo "步骤 4: 部署到 Cloudflare Pages"
+echo "1. 访问 https://dash.cloudflare.com"
+echo "2. 导航到 Pages 部分"
+echo "3. 点击 'Create a project' -> 'Connect to Git'"
+echo "4. 选择您的 watch-ricon-stock 仓库"
+echo "5. 在 'Environment Variables' 部分添加上述变量"
+echo "6. 点击 'Save and Deploy'"
 
-echo "应用正在本地运行，访问 http://localhost:5000"
-echo "测试完成后，使用 'docker stop watch-ricon-stock-test && docker rm watch-ricon-stock-test' 停止容器"
+echo
+echo "注意: Cloudflare Pages 本身不会持续运行 Python 脚本。"
+echo "要实现监控功能，您需要:"
+echo "- 使用外部服务定时触发 /start 端点"
+echo "- 或使用 GitHub Actions 定时运行监控脚本"
 
-echo "部署准备完成!"
-echo "要部署到 Cloudflare Container:"
-echo "1. 上传镜像到容器注册表"
-echo "2. 在 Cloudflare Dashboard 中部署"
+echo "部署准备完成！"

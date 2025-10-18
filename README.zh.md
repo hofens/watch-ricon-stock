@@ -268,7 +268,7 @@ watch-ricon-stock/
 │   └── config.json          # 默认配置
 ├── start_monitor.bat        # Windows 启动脚本
 ├── requirements.txt         # Python 依赖
-├── README.md              # 本文件
+├── README.md              # 英文文档
 ├── README.zh.md           # 中文文档
 ├── product_monitor.log    # 应用程序日志（生成的）
 └── product_changes.log    # 变更通知（生成的）

@@ -268,7 +268,8 @@ watch-ricon-stock/
 │   └── config.json          # Default configuration
 ├── start_monitor.bat        # Windows startup script
 ├── requirements.txt         # Python dependencies
-├── README.md              # This file
+├── README.md              # English documentation
+├── README.zh.md           # Chinese documentation
 ├── product_monitor.log    # Application logs (generated)
 └── product_changes.log    # Change notifications (generated)
 ```

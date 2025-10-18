@@ -4,12 +4,31 @@
 
 本项目支持通过 Cloudflare Workers 部署 Python 应用，并通过环境变量配置进行部署。
 
-### 前提条件
+### 重要说明：Python Workers 现状
 
-- Cloudflare 的 Python Workers 功能需要在 Beta 阶段进行申请或使用支持的账户
-- 需要 `python_workers` 兼容性标志
+请注意，截至 2024 年末，Cloudflare 的 Python Workers 功能仍处于 Beta 阶段，可能需要特殊访问权限。如果标准部署失败，请考虑以下替代方案：
 
-### 部署步骤
+### 替代方案 1: 使用 Docker 部署到 Cloudflare Container Registry
+
+1. **构建 Docker 镜像**
+   ```bash
+   docker build -t watch-ricon-stock .
+   ```
+
+2. **部署到 Cloudflare**
+   - 在 Cloudflare Dashboard 中选择 Workers & Pages
+   - 选择 "Deploy a container image"
+   - 使用构建好的镜像
+
+### 替代方案 2: 使用 Cloudflare Pages + 外部服务器
+
+- 将项目托管在 GitHub
+- 使用外部服务器或服务运行监控脚本
+- 通过环境变量配置
+
+### 原始 Python Workers 部署步骤（如果可用）
+
+如果您的账户有 Python Workers 访问权限，可以按以下步骤操作：
 
 1. **在 GitHub 创建仓库**
    - 将项目代码推送到 GitHub 仓库
@@ -40,16 +59,20 @@
    - `API_URL` - (可选) 监控的 API 地址
    - `POLLING_INTERVAL` - (可选) 轮询间隔（秒）
 
+### wrangler.toml 配置
+
+```toml
+name = "watch-ricon-stock"
+main = "web_api.py"  # 指定主入口文件
+compatibility_date = "2024-10-18"
+compatibility_flags = ["python_workers"]
+```
+
 ### 配置说明
 
-1. **wrangler.toml 配置**:
-   ```toml
-   name = "watch-ricon-stock"
-   compatibility_date = "2024-10-18"
-   compatibility_flags = ["python_workers"]
-   ```
-
-2. **环境变量**: 敏感信息（邮箱账号密码）通过环境变量传递
+1. **main 属性**: 指定 `web_api.py` 作为主入口
+2. **兼容性标志**: 启用 `python_workers`
+3. **环境变量**: 敏感信息（邮箱账号密码）通过环境变量传递
 
 ### 部署后配置
 
@@ -72,7 +95,7 @@ crons = ["*/10 * * * *"]  # 每10分钟运行一次
 
 ### 注意事项
 
-1. **Python Workers 支持**: 这需要 Cloudflare 的 Python Workers 支持
+1. **Python Workers 访问**: 这需要 Cloudflare 的 Python Workers 访问权限 (Beta)
 2. **兼容性标志**: 需要 `python_workers` 兼容性标志
 3. **持续监控**: 可以使用 Cron Triggers 实现定时检查
 

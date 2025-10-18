@@ -1,7 +1,14 @@
 #!/bin/bash
-# Cloudflare Workers 部署脚本
+# Cloudflare 部署脚本
 
-echo "准备部署 watch-ricon-stock 到 Cloudflare Workers..."
+echo "准备部署 watch-ricon-stock 到 Cloudflare..."
+
+echo "重要提醒: Cloudflare Python Workers 目前可能处于 Beta 阶段"
+echo "如果没有 Python Workers 访问权限，请考虑使用 Docker 部署方案"
+
+echo
+echo "选项 1: Python Workers 部署 (需要特殊访问权限)"
+echo "------------------------"
 
 echo "步骤 1: 检查必要工具"
 if ! command -v npm &> /dev/null; then
@@ -45,7 +52,12 @@ echo "运行部署命令:"
 echo "  wrangler deploy"
 
 echo
-echo "注意: 这需要 Cloudflare Python Workers 支持，可能需要特殊权限。"
-echo "如果遇到 'python_workers' 兼容性标志错误，请确认您有访问 Python Workers 的权限。"
+echo "选项 2: Docker 部署 (推荐)"
+echo "------------------------"
+echo "如果 Python Workers 不可用，可以使用 Docker 部署:"
+echo "1. 构建 Docker 镜像: docker build -t watch-ricon-stock ."
+echo "2. 推送到容器仓库"
+echo "3. 在 Cloudflare 中部署容器镜像"
 
+echo
 echo "部署准备完成！"

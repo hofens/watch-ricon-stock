@@ -1,4 +1,5 @@
 name = "watch-ricon-stock"
+main = "web_api.py"
 compatibility_date = "2024-10-18"
 compatibility_flags = ["python_workers"]
 

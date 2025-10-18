@@ -1,18 +1,18 @@
 {
     "api_url": "https://newsite.ricn-mall.com/api/pc/get_products?page=1&limit=10&cid=9&sid=0&priceOrder=&news=0",
     "polling_interval_seconds": 300,
-    "notification_method": "email",
+    "notification_method": "console",
     "notification_config": {
         "email": {
-            "smtp_server": "smtp.163.com",
-            "smtp_port": 25,
-            "smtp_user": "huanghofe@163.com",
-            "smtp_password": "JZcNrFDUDh7PbTsi",
-            "to_email": "huanghofe@163.com"
+            "smtp_server": "smtp.gmail.com",
+            "smtp_port": 587,
+            "smtp_user": "your_email@gmail.com",
+            "smtp_password": "your_app_password",
+            "to_email": "recipient@example.com"
         }
     },
     "time_range": {
-        "enable": true,
+        "enable": false,
         "start_time": "09:00",
         "end_time": "23:59"
     },

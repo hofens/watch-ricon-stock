@@ -50,6 +50,10 @@ product_changes.log
 test_product_monitor.log
 test_product_changes.log
 
+# Configuration with sensitive data
+config.json
+src/config.json
+
 # Temporary files
 *.tmp
 *.temp

@@ -1,12 +1,17 @@
 #!/bin/bash
-# Cloudflare Pages 部署准备脚本
+# Cloudflare Workers 部署脚本
 
-echo "准备部署 watch-ricon-stock 到 Cloudflare Pages..."
+echo "准备部署 watch-ricon-stock 到 Cloudflare Workers..."
 
-echo "步骤 1: 检查项目依赖"
-if ! command -v git &> /dev/null; then
-    echo "错误: Git 未安装或不可用"
+echo "步骤 1: 检查必要工具"
+if ! command -v npm &> /dev/null; then
+    echo "错误: npm 未安装或不可用"
     exit 1
+fi
+
+if ! command -v wrangler &> /dev/null; then
+    echo "Wrangler 未安装，正在安装..."
+    npm install -g wrangler
 fi
 
 echo "步骤 2: 确保代码已提交"
@@ -20,8 +25,12 @@ if [[ -n "$git_status" ]]; then
     fi
 fi
 
-echo "步骤 3: 验证配置"
-echo "在 Cloudflare Pages 部署时，请设置以下环境变量:"
+echo "步骤 3: 登录 Cloudflare"
+echo "运行 'wrangler login' 并按照提示登录"
+echo "注意: Python Workers 可能需要 Beta 访问权限"
+
+echo "步骤 4: 验证配置"
+echo "部署前，请确保已在 wrangler.toml 或 Cloudflare Dashboard 中设置以下环境变量:"
 echo "  - SMTP_SERVER: 邮件服务器 (如 smtp.gmail.com)"
 echo "  - SMTP_PORT: 邮件服务器端口 (如 587)"
 echo "  - SMTP_USER: 邮箱账号"
@@ -31,18 +40,12 @@ echo "  - API_URL: (可选) 监控的 API 地址"
 echo "  - POLLING_INTERVAL: (可选) 轮询间隔（秒）"
 
 echo
-echo "步骤 4: 部署到 Cloudflare Pages"
-echo "1. 访问 https://dash.cloudflare.com"
-echo "2. 导航到 Pages 部分"
-echo "3. 点击 'Create a project' -> 'Connect to Git'"
-echo "4. 选择您的 watch-ricon-stock 仓库"
-echo "5. 在 'Environment Variables' 部分添加上述变量"
-echo "6. 点击 'Save and Deploy'"
+echo "步骤 5: 部署到 Cloudflare Workers"
+echo "运行部署命令:"
+echo "  wrangler deploy"
 
 echo
-echo "注意: Cloudflare Pages 本身不会持续运行 Python 脚本。"
-echo "要实现监控功能，您需要:"
-echo "- 使用外部服务定时触发 /start 端点"
-echo "- 或使用 GitHub Actions 定时运行监控脚本"
+echo "注意: 这需要 Cloudflare Python Workers 支持，可能需要特殊权限。"
+echo "如果遇到 'python_workers' 兼容性标志错误，请确认您有访问 Python Workers 的权限。"
 
 echo "部署准备完成！"

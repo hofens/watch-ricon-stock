@@ -59,7 +59,17 @@ git push -u origin master
    python src/product_monitor.py --config src/config.local.json
    ```
 
+## Git连接问题解决（如果遇到连接错误）
+
+如果您在推送代码时遇到类似错误：
+```
+Failed to connect to 127.0.0.1 port 7890 after 2080 ms: Connection refused
+```
+
+请参考 `GIT_PROXY_FIX.md` 文件中的解决方法。
+
 ## 项目文档
 
 - 英文文档：README.md
 - 中文文档：README.zh.md
+- 代理问题解决：GIT_PROXY_FIX.md

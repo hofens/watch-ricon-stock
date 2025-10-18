@@ -49,10 +49,13 @@ product_monitor.log
 product_changes.log
 test_product_monitor.log
 test_product_changes.log
+npminstall-debug.log
 
 # Configuration with sensitive data
 config.json
 src/config.json
+config.local.json
+src/config.local.json
 
 # Temporary files
 *.tmp

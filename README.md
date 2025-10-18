@@ -294,5 +294,23 @@ Features:
 - Detailed logging in Actions console
 - Configurable monitoring intervals
 
+## Single-Run Monitor
+
+The project includes a single-run monitor (`src/product_monitor_once.py`) that:
+- Checks product stock once and exits
+- Sends email notifications when products are in stock (stock > 0)
+- Uses the same configuration as the main monitor
+- Can be used for on-demand checks or cron jobs
+
+To run the single-run monitor:
+```bash
+python src/product_monitor_once.py
+```
+
+Or with a specific config file:
+```bash
+python src/product_monitor_once.py --config src/config.local.json
+```
+
 ## License
 This project is open source and available under the MIT License.

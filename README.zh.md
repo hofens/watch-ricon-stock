@@ -294,5 +294,23 @@ watch-ricon-stock/
 - 在 Actions 控制台中详细记录日志
 - 可配置的监控间隔
 
+## 单次运行监控器
+
+项目包含一个单次运行监控器（`src/product_monitor_once.py`），它可以：
+- 检查一次商品库存然后退出
+- 当商品有库存（库存 > 0）时发送邮件通知
+- 使用与主监控器相同的配置
+- 可用于按需检查或 cron 作业
+
+运行单次运行监控器：
+```bash
+python src/product_monitor_once.py
+```
+
+或使用特定配置文件：
+```bash
+python src/product_monitor_once.py --config src/config.local.json
+```
+
 ## 许可证
 本项目开源，采用 MIT 许可证。

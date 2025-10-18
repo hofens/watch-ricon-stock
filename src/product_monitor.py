@@ -447,25 +447,33 @@ class ProductMonitor:
 
 def main():
     import argparse
+    import os
     
     parser = argparse.ArgumentParser(description='Monitor Ricn Mall API for product changes')
-    parser.add_argument('--config', type=str, default='config.json',
-                        help='Path to the configuration file (default: config.json)')
+    parser.add_argument('--config', type=str,
+                        help='Path to the configuration file (default: config.local.json if exists, otherwise config.json)')
     
     args = parser.parse_args()
     
-    # Handle config file path - try different possible locations
-    import os
-    config_file = args.config
-    
-    # If the specified config file doesn't exist from current working directory
-    if not os.path.exists(config_file):
-        # Try src/config.json (for when running from project root)
-        if os.path.exists('src/config.json'):
-            config_file = 'src/config.json'
-        # Or if running from src directory, try relative path
-        elif os.path.exists('../src/config.json'):
-            config_file = '../src/config.json'
+    # Handle config file path with priority: --config arg > config.local.json > config.json
+    if args.config:
+        # Use specified config file
+        config_file = args.config
+    elif os.path.exists('src/config.local.json'):
+        # Use config.local.json if it exists
+        config_file = 'src/config.local.json'
+    elif os.path.exists('config.local.json'):
+        # Check for config.local.json in current directory
+        config_file = 'config.local.json'
+    elif os.path.exists('src/config.json'):
+        # Use config.json in src directory
+        config_file = 'src/config.json'
+    elif os.path.exists('config.json'):
+        # Check for config.json in current directory
+        config_file = 'config.json'
+    else:
+        # Default to config.json
+        config_file = 'config.json'
     
     # Create and start the monitor
     monitor = ProductMonitor(config_file=config_file)

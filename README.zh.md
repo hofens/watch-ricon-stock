@@ -81,7 +81,7 @@ pip install -r requirements.txt
 
 ## 使用方法
 
-使用默认配置运行监控器：
+使用自动配置检测运行监控器（按顺序检查：config.local.json, config.json）：
 
 ```bash
 python src/product_monitor.py
@@ -92,6 +92,16 @@ python src/product_monitor.py
 ```bash
 python src/product_monitor.py --config /path/to/your/config.json
 ```
+
+### 配置文件优先级
+程序将按以下优先级顺序查找配置文件：
+1. 命令行参数（如果提供了 `--config`）
+2. `src/config.local.json`（用于本地配置 - 这是推荐方法）
+3. `config.local.json`（在当前目录中）
+4. `src/config.json`（默认配置）
+5. `config.json`（在当前目录中）
+
+这个系统允许您创建 `config.local.json` 文件来保存个人设置，这些设置不会被提交到版本控制中，因为 `config.local.json` 已包含在 `.gitignore` 中。
 
 ## 通知方式
 

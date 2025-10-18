@@ -81,7 +81,7 @@ To use email notifications, set `notification_method` to `email` and configure t
 
 ## Usage
 
-Run the monitor with the default configuration:
+Run the monitor with automatic configuration detection (checks in order: config.local.json, config.json):
 
 ```bash
 python src/product_monitor.py
@@ -92,6 +92,16 @@ Or specify a custom configuration file:
 ```bash
 python src/product_monitor.py --config /path/to/your/config.json
 ```
+
+### Configuration File Priority
+The program will look for configuration files in the following priority order:
+1. Command-line argument (if `--config` is provided)
+2. `src/config.local.json` (for local configurations - this is the recommended approach)
+3. `config.local.json` (in the current directory)
+4. `src/config.json` (the default configuration)
+5. `config.json` (in the current directory)
+
+This system allows you to create a `config.local.json` file for your personal settings that won't be committed to version control, since `config.local.json` is included in `.gitignore`.
 
 ## Notification Methods
 

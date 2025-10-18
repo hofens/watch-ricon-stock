@@ -284,5 +284,19 @@ watch-ricon-stock/
 └── product_changes.log    # 变更通知（生成的）
 ```
 
+## Cloudflare 部署
+
+本项目包含对 Cloudflare 基础设施部署的支持。详情请参阅 `CLOUDFLARE_DEPLOY.md` 了解如何使用以下方式部署应用程序：
+
+- Cloudflare Workers
+- Cloudflare Pages 与 Functions
+- Cloudflare Container (Docker)
+
+项目包含：
+- 基于 Flask 的 Web API（`web_api.py`）用于 HTTP 访问
+- 用于容器化部署的 Docker 配置
+- 用于 Cloudflare Workers 的 Wrangler 配置
+- 用于简化设置的部署脚本
+
 ## 许可证
 本项目开源，采用 MIT 许可证。

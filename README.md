@@ -284,5 +284,19 @@ watch-ricon-stock/
 └── product_changes.log    # Change notifications (generated)
 ```
 
+## Cloudflare Deployment
+
+This project includes support for deployment on Cloudflare infrastructure. See `CLOUDFLARE_DEPLOY.md` for detailed instructions on deploying the application using:
+
+- Cloudflare Workers
+- Cloudflare Pages with Functions  
+- Cloudflare Container (Docker)
+
+The project includes:
+- A Flask-based web API (`web_api.py`) for HTTP access
+- Docker configuration for containerized deployment
+- Wrangler configuration for Cloudflare Workers
+- Deployment script for easy setup
+
 ## License
 This project is open source and available under the MIT License.

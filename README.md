@@ -1,11 +1,12 @@
-# Ricon - Ricn Mall Product Monitor
+# watch-ricon-stock - Ricn Mall Stock Monitor
 
-Ricon (Ricn Mall Monitor) is a powerful monitoring tool that tracks product listing changes on the Ricn Mall API and provides comprehensive notifications when changes occur.
+watch-ricon-stock is a powerful monitoring tool that tracks product listing changes and stock updates on the Ricn Mall API and provides comprehensive notifications when changes occur.
 
 ## Features
 
 - Monitors the Ricn Mall API at regular intervals
 - Detects new, removed, and updated products with detailed information
+- Tracks stock level changes in real-time
 - Supports multiple notification methods (console, file, email)
 - Configurable polling interval
 - Time range restriction (monitor only during specified hours)
@@ -261,7 +262,7 @@ python src/product_monitor.py --config path/to/your/config.json
 
 ## Project Structure
 ```
-Ricon/
+watch-ricon-stock/
 ├── src/
 │   ├── product_monitor.py    # Main monitoring application
 │   └── config.json          # Default configuration

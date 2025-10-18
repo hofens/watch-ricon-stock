@@ -284,5 +284,15 @@ watch-ricon-stock/
 └── product_changes.log    # Change notifications (generated)
 ```
 
+## GitHub Actions Deployment
+
+This project supports automatic deployment and execution using GitHub Actions. See `GITHUB_ACTIONS.md` for detailed instructions on setting up continuous monitoring.
+
+Features:
+- Automated product monitoring on schedule
+- Environment variable configuration via GitHub Secrets
+- Detailed logging in Actions console
+- Configurable monitoring intervals
+
 ## License
 This project is open source and available under the MIT License.

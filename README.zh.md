@@ -284,5 +284,15 @@ watch-ricon-stock/
 └── product_changes.log    # 变更通知（生成的）
 ```
 
+## GitHub Actions 部署
+
+本项目支持使用 GitHub Actions 进行自动部署和执行。详情请参阅 `GITHUB_ACTIONS.md` 了解如何设置持续监控。
+
+功能特性：
+- 按计划自动产品监控
+- 通过 GitHub Secrets 进行环境变量配置
+- 在 Actions 控制台中详细记录日志
+- 可配置的监控间隔
+
 ## 许可证
 本项目开源，采用 MIT 许可证。

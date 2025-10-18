@@ -1,0 +1,58 @@
+name: Deploy watch-ricon-stock
+
+on:
+  push:
+    branches: [ master ]
+  schedule:
+    - cron: '*/10 * * * *'  # 每10分钟运行一次
+  workflow_dispatch: # 允许手动触发
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        
+    - name: Create config file from secrets
+      run: |
+        cat << EOF > src/config.local.json
+        {
+          "api_url": "${{ secrets.API_URL }}",
+          "polling_interval_seconds": ${{ secrets.POLLING_INTERVAL || 300 }},
+          "notification_method": "${{ secrets.NOTIFICATION_METHOD || 'email' }}",
+          "time_range": {
+            "enable": ${{ secrets.TIME_RANGE_ENABLE || false }},
+            "start_time": "${{ secrets.START_TIME || '09:00' }}",
+            "end_time": "${{ secrets.END_TIME || '23:59' }}"
+          },
+          "notification_config": {
+            "email": {
+              "smtp_server": "${{ secrets.SMTP_SERVER }}",
+              "smtp_port": ${{ secrets.SMTP_PORT }},
+              "smtp_user": "${{ secrets.SMTP_USER }}",
+              "smtp_password": "${{ secrets.SMTP_PASSWORD }}",
+              "to_email": "${{ secrets.TO_EMAIL }}"
+            }
+          },
+          "log_file": "product_monitor.log",
+          "changes_log": "product_changes.log"
+        }
+        EOF
+      
+    - name: Run the monitor
+      run: |
+        python src/product_monitor.py --config src/config.local.json
+      env:
+        PYTHONUNBUFFERED: 1

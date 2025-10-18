@@ -3,7 +3,7 @@ name: Stock Monitor Once
 on:
   schedule:
     # 每天早上8点到午夜，每5分钟运行一次 (08:00-23:59)
-    - cron: '*/5 8-23 * * *'
+    - cron: '*/10 8-23 * * *'
   workflow_dispatch: # 允许手动触发
 
 jobs:

@@ -1,14 +1,13 @@
-name: Deploy watch-ricon-stock
+name: Stock Monitor Once
 
 on:
-  push:
-    branches: [ master ]
   schedule:
-    - cron: '*/10 * * * *'  # 每10分钟运行一次
+    # 每天早上8点到午夜，每5分钟运行一次 (08:00-23:59)
+    - cron: '*/5 8-23 * * *'
   workflow_dispatch: # 允许手动触发
 
 jobs:
-  deploy:
+  monitor:
     runs-on: ubuntu-latest
     
     steps:
@@ -30,12 +29,11 @@ jobs:
         cat << EOF > src/config.local.json
         {
           "api_url": "${{ secrets.API_URL }}",
-          "polling_interval_seconds": ${{ secrets.POLLING_INTERVAL || 300 }},
           "notification_method": "${{ secrets.NOTIFICATION_METHOD || 'email' }}",
           "time_range": {
-            "enable": ${{ secrets.TIME_RANGE_ENABLE || false }},
-            "start_time": "${{ secrets.START_TIME || '09:00' }}",
-            "end_time": "${{ secrets.END_TIME || '23:59' }}"
+            "enable": false,
+            "start_time": "08:00",
+            "end_time": "23:59"
           },
           "notification_config": {
             "email": {
@@ -46,13 +44,13 @@ jobs:
               "to_email": "${{ secrets.TO_EMAIL }}"
             }
           },
-          "log_file": "product_monitor.log",
+          "log_file": "product_monitor_once.log",
           "changes_log": "product_changes.log"
         }
         EOF
       
-    - name: Run the monitor
+    - name: Run the stock monitor once
       run: |
-        python src/product_monitor.py --config src/config.local.json
+        python src/product_monitor_once.py --config src/config.local.json
       env:
         PYTHONUNBUFFERED: 1
